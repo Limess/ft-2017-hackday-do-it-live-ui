@@ -1,0 +1,31 @@
+{
+  "dependencies": {
+    "axios": "^0.16.2",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.24.1",
+    "browser-sync": "^2.18.13",
+    "crawler": "^1.0.5",
+    "date-fns": "^1.28.5",
+    "global": "^4.3.2",
+    "gzip-size-cli": "^2.1.0",
+    "moment": "^2.18.1",
+    "preact": "^8.2.5",
+    "pretty-bytes-cli": "^2.0.0",
+    "rollup": "^0.50.0",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-postcss": "^0.5.5",
+    "winston": "^2.3.1"
+  },
+  "name": "Hackday",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "browser-sync start --open https://local.ft.com --https --server --index homepage.html",
+    "crawl": "node crawler.js",
+    "build": "rollup -c",
+    "watch": "yarn run build --watch & yarn start"
+  }
+}
