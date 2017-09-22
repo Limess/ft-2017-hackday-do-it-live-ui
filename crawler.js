@@ -4,6 +4,8 @@ const logger = require('winston');
 const path = require('path');
 const moment = require('moment');
 
+moment.locale('en-GB');
+
 const FT_LIVE_BASE_URI = 'https://live.ft.com';
 
 const dataArray = [];
