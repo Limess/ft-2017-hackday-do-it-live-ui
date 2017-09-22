@@ -1,18 +1,18 @@
 import {h, render} from 'preact';
-// import axois from 'axois';
+import axois from 'axois';
 import './hack.css'
 
 const contentId = document.getElementById('site-content').getAttribute('data-content-id');
 
-const FTLiveItem = ({meta, url, imageSrc, body}) => (
+const FTLiveItem = ({location, url, imageSrc, body}) => (
 	<li class="o-teaser-collection__item">
 		<div class="o-teaser o-teaser--small o-teaser--article o-teaser--verify-syndicatable" data-o-component="o-teaser" data-trackable="teaser">
 			<div class="o-teaser__content">
 
-				{meta && (
+				{location && (
 					<div class="o-teaser__meta">
 							<span class="o-teaser__tag" data-trackable="primary-concept">
-								{meta}
+								{location}
 							</span>
 					</div>
 				)}
@@ -46,25 +46,32 @@ const TeaserCollection = (props) => (
 
 const stubData = [
 	{
-		body: 'My best event',
-		meta: 'Super event time',
-		url: 'https://live.ft.com/Events/2017/FT-Women-At-The-Top',
-		imageSrc: 'https://live.ft.com/var/ftlive/storage/images/events/2017/ft-women-at-the-top/817085-5-eng-GB/FT-Women-At-The-Top_eventcardimage.jpg'
-	},
-	{
-		body: 'Not so good event',
-		meta: 'Oh no what a bad event',
-		url: 'https://live.ft.com/Events/2017/FT-Innovative-Lawyers-Awards-Europe-2017',
-		imageSrc: 'https://live.ft.com/var/ftlive/storage/images/events/2017/ft-innovative-lawyers-awards-europe-2017/813037-6-eng-GB/FT-Innovative-Lawyers-Awards-Europe-2017_eventcardimage.png'
+	    "uri": "https://live.ft.com/Events/2018/FT-Digital-Health-Summit-Europe",
+	    "categories": [
+	        "Healthcare&LifeSciences"
+	    ],
+	    "title": "FT Digital Health Summit Europe",
+		"imageSrc": 'https://live.ft.com/var/ftlive/storage/images/events/2017/ft-digital-health-summit-usa/816896-4-eng-GB/FT-Digital-Health-Summit-USA_eventcardimage.png'
+	    "location": "London",
+	    "date": "2018-06-19T00:00:00.000+01:00",
+	    "speakers": [],
+	    "description": "Assess how patients are being empowered and further involved in the transformation of healthcareHear how collaborations between pharma and big tech are enriching the commercial viability of digital healthMeet and greet with the full array of industry stakeholders, from healthcare to technology, pharma to start-ups, regulation to governmentIdentify solutions in overcoming cyber security threats in digital healthDon't get left behind - be part of a must-attend event mapping the continued transformation of healthcare\n    \n        FT Live has a reputation for delivering very senior board level audiences to attend a wide range of world class thought-leadership events across the globe for nearly 40 years.The FT Digital Health Summit Europe will be attended by:Life science companiesPharmaceutical and biotechnology companies Healthcare providers Multi-technology corporations Investment banks Medical device manufacturers Health insurers Health/big data companies Venture capitalists Health regulatory agencies Mobile app providers Mobile operators and service providers Technology consultancies Management consultancies Telemedicine companies Mobile technology manufacturers Digital health companies Data integrators/analytics/brokers Genomics/personalised medicine related companies Wireless-device manufacturers\n    \n        Gain access to senior decision makers across the full spectrum of the healthcare industryBrand alignment with the FT and its unrivalled credibilityDemonstrate thought leadership around the current critical issues affecting the healthcare sectorBenefit from sustained international visibility through our advertising and marketing campaigns\n    \n        Ticket Type                                                                                FeeStandard Summit Ticket£899 +VAT"
 	}
 ];
 
-// const {data: liveData} = await axios.get('/magic-api-url', {
-	// params: {
-	// 	contentId
-	// }
-// });
+let data;
+try {
+	data = await axios.get(`/get-event/${contentId}`);
+} catch (error) {
+	data = stubData;
+}
 
+const dataMapper = ({title, location, uri, imageSrc}) => ({
+	location,
+	imageSrc,
+	body: title,
+	url: uri
+});
 
 render((
    	<TeaserCollection 
@@ -72,7 +79,7 @@ render((
    	>
 	   {stubData.map((data) => (
 	   		<FTLiveItem 
-	   			{...data}
+	   			{...dataMapper(data)}
 	   		/>
 	   ))}
 	</TeaserCollection>
