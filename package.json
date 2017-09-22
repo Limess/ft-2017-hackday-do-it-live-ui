@@ -23,7 +23,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "browser-sync start --open https://local.ft.com --https --server --index homepage.html",
+    "start": "browser-sync start --open=https://local.ft.com --https --server --serve-static=output --index=homepage.html",
     "crawl": "node crawler.js",
     "build": "rollup -c",
     "watch": "yarn run build --watch & yarn start"

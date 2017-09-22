@@ -9,6 +9,9 @@ export default {
     file: 'output/hack.js',
     format: 'iife'
   },
+  watch: {
+    include: 'statics/**'
+  },
   plugins: [
     postcss({
       extensions: [ '.css' ],

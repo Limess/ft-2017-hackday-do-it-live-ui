@@ -1,31 +1,27 @@
 import {h, render} from 'preact';
-import axois from 'axois';
+// import axois from 'axois';
 import './hack.css'
 
 const contentId = document.getElementById('site-content').getAttribute('data-content-id');
 
-const FTLiveItem = (props) => (
+const FTLiveItem = ({meta, url, imageSrc, body}) => (
 	<li class="o-teaser-collection__item">
 		<div class="o-teaser o-teaser--small o-teaser--article o-teaser--verify-syndicatable" data-o-component="o-teaser" data-trackable="teaser">
 			<div class="o-teaser__content">
 
-				{props.meta && (
+				{meta && (
 					<div class="o-teaser__meta">
-							<a href="https://www.ft.com/fastft" class="o-teaser__tag" data-trackable="primary-concept">
-								{props.meta}
-							</a>
+							<span class="o-teaser__tag" data-trackable="primary-concept">
+								{meta}
+							</span>
 					</div>
 				)}
 
-				<div>	
-					<div class="n-image-wrapper o-teaser__image-placeholder n-image-wrapper--placeholder">
-						<img role="presentation" alt="" class="hack-image" src={props.imageSrc} />
-					</div>
-				</div>
+					<img role="presentation" alt="" class="hack-image__image" src={imageSrc} />
 	
 				<div class="o-teaser__heading js-teaser-heading">
-					<a href={props.url} class="js-teaser-heading-link" data-trackable="main-link">
-						{props.body }
+					<a href={url} class="js-teaser-heading-link" data-trackable="main-link">
+						{body}
 					</a>
 				</div>
 			</div>
@@ -33,15 +29,15 @@ const FTLiveItem = (props) => (
 	</li>
 );
 
-const TeaserHeading = (props) => (
-	<div class="standalone-teaser-heading">Read next</div>
+const TeaserHeading = ({text, url}) => (
+	<div class="o-teaser-collection__heading o-teaser-collection__heading--small">
+		<a href={url} data-trackable="section-title">{text}</a>
+	</div>
 );
 
 const TeaserCollection = (props) => (
-	<div class="o-teaser-collection" role="group" data-trackable="suggested-reads">
-		<div class="o-teaser-collection__heading o-teaser-collection__heading--small">
-				<a href="https://www.ft.com/topics/themes/Global_terror" data-trackable="section-title">{props.heading}</a>
-		</div>
+	<div class="hack-teaser__collection o-teaser-collection" role="group" data-trackable="suggested-reads">
+		{props.heading}
 		<ol class="o-teaser-collection__items">
 			{props.children}
 		</ol>
@@ -59,7 +55,7 @@ const stubData = [
 		body: 'Not so good event',
 		meta: 'Oh no what a bad event',
 		url: 'https://live.ft.com/Events/2017/FT-Innovative-Lawyers-Awards-Europe-2017',
-		imageSrc: '/var/ftlive/storage/images/events/2017/ft-innovative-lawyers-awards-europe-2017/813037-6-eng-GB/FT-Innovative-Lawyers-Awards-Europe-2017_eventcardimage.png'
+		imageSrc: 'https://live.ft.com/var/ftlive/storage/images/events/2017/ft-innovative-lawyers-awards-europe-2017/813037-6-eng-GB/FT-Innovative-Lawyers-Awards-Europe-2017_eventcardimage.png'
 	}
 ];
 
@@ -71,7 +67,9 @@ const stubData = [
 
 
 render((
-   	<TeaserCollection heading="Financial Times Live Events">
+   	<TeaserCollection 
+   		heading={<TeaserHeading text="Financial Times Live Events" url="https://live.ft.com" />}
+   	>
 	   {stubData.map((data) => (
 	   		<FTLiveItem 
 	   			{...data}
