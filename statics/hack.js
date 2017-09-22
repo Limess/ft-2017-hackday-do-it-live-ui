@@ -61,7 +61,7 @@ const stubData = [
 
 let data;
 try {
-	data = await axios.get(`/get-event/${contentId}`);
+	data = await axios.get(`https://localhost:8080/get-event/${contentId}`);
 } catch (error) {
 	data = stubData;
 }
