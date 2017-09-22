@@ -78,7 +78,7 @@ const renderApp = (data) => render((
 ), document.getElementById('hack-root'));
 
 
-fetch(`https://localhost:8080/getevent/${contentId}`).then((response) => response.json())
+fetch(`https://local.ft.com:8080/getevent/${contentId}`).then((response) => response.json())
   .then(function(body) {
   	renderApp(body);
   })
