@@ -4,7 +4,7 @@ const logger = require('winston');
 const path = require('path');
 const moment = require('moment');
 
-const BASE_URI = 'https://live.ft.com';
+const FT_LIVE_BASE_URI = 'https://live.ft.com';
 
 const dataArray = [];
 
@@ -31,7 +31,8 @@ c = new Crawler({
             events.each(function() {
                 const href = $(this).find('a').attr('href');
                 if (/\/events\//i.test(href)) {
-                    crawlEvent(`${BASE_URI}${href}`);
+                    const imageSrc = $(this).find('img').attr('src');
+                    crawlEvent({imageSrc: `${FT_LIVE_BASE_URI}${imageSrc}`})(`${FT_LIVE_BASE_URI}${href}`);
                 }
             });
 
@@ -79,7 +80,7 @@ const getDescription = ($) => {
 }
 
 
-const crawlEvent = (uri) => {
+const crawlEvent = ({imageSrc}) => (uri) => {
     c.queue([{
         uri, 
         callback(error, {request, $}, done) {
@@ -96,6 +97,7 @@ const crawlEvent = (uri) => {
 
                 const entry = {
                     uri,
+                    imageSrc,
                     categories: getCategories($banner)  ,
                     title: $banner.find(itemProp('name')).text().trim(),
                     location: $banner.find(`.ft-event-location ${itemProp('location')}`).text().trim(),
@@ -111,8 +113,7 @@ const crawlEvent = (uri) => {
                     }).get(),
                     description: getDescription($)
                 };
-                logger.info(entry.date);
-
+                logger.info('Collected event', {uri: entry.uri});
                 dataArray.push(entry);
                 // logger.info(entry);
                 done();
