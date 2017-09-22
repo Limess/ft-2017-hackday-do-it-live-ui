@@ -1,5 +1,4 @@
 import {h, render} from 'preact';
-import axios from 'axios/dist/axios';
 import './hack.css'
 
 const contentId = document.getElementById('site-content').getAttribute('data-content-id');
@@ -66,20 +65,24 @@ const dataMapper = ({title, location, uri, imageSrc}) => ({
 	url: uri
 });
 
+const renderApp = (data) => render((
+   	<TeaserCollection 
+   		heading={<TeaserHeading text="Financial Times Live Events" url="https://live.ft.com" />}
+   	>
+	   {stubData.map((data) => (
+	   		<FTLiveItem 
+	   			{...dataMapper(data)}
+	   		/>
+	   ))}
+	</TeaserCollection>
+), document.getElementById('hack-root'));
 
-axios.get(`https://localhost:8080/get-event/${contentId}`)
-.catch((error) => {
-	console.error('Hack call failed', error);
-}).then((data) => {
-	render((
-	   	<TeaserCollection 
-	   		heading={<TeaserHeading text="Financial Times Live Events" url="https://live.ft.com" />}
-	   	>
-		   {stubData.map((data) => (
-		   		<FTLiveItem 
-		   			{...dataMapper(data)}
-		   		/>
-		   ))}
-		</TeaserCollection>
-	), document.getElementById('hack-root'));
-});
+
+fetch(`https://localhost:8080/getevent/${contentId}`).then((response) => response.json())
+  .then(function(body) {
+  	renderApp(body);
+  })
+  .catch(function(error) {
+  	console.error('Hack call failed', error);
+  	renderApp(stubData);
+  });
